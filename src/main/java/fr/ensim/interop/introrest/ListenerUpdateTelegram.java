@@ -61,12 +61,24 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 						System.out.println(cmds.length);
 
 						if(cmds.length == 1){
-							jokeRestController.getJoke(true);
+							jokeRestController.getJoke(true, "3XdvoxRjObxCRoOtzyXVfNqG52oAl8R6");
 						}else{
 							jokeRestController.getJokeLevel(true, cmds[1]);
 						}
 					}
 					else if(cmds[0].equalsIgnoreCase("meteo") || cmds[0].equalsIgnoreCase("weather")){
+						if(cmds.length == 1){
+							openWeatherRestController.meteo(true, "Le Mans");
+						}else{
+							// To get cities with more than a word
+							String cityName = lastMessageFromClient.replaceAll(cmds[0], "");
+							openWeatherRestController.meteo(true, cityName);
+						}
+					}
+					else if(cmds[0].equalsIgnoreCase("boost")){
+						messageRestController.sendMessage("Allez bébou! Tu peux y arriver");
+					}
+					else if(cmds[0].equalsIgnoreCase("meteo")){
 						if(cmds.length == 1){
 							openWeatherRestController.meteo(true, "Le Mans");
 						}else{

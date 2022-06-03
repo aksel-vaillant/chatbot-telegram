@@ -2,7 +2,10 @@ package fr.ensim.interop.introrest.controller;
 
 import fr.ensim.interop.introrest.model.joke.Joke;
 import fr.ensim.interop.introrest.model.joke.ListJoke;
+import fr.ensim.interop.introrest.model.secure.ListToken;
+import fr.ensim.interop.introrest.model.secure.Token;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,12 +20,14 @@ public class JokeRestController {
     private MessageRestController messageRestController;
 
     private ArrayList<Joke> listJokes = ListJoke.returnJokes();
+    private ArrayList<Token> listTokens = ListToken.returnTokens();
 
     //Opérations sur la ressource getJoke
     @GetMapping("/getJoke")
     public ResponseEntity<Joke> getJoke(
-            @RequestParam (name = "sendingMessage", required = false, defaultValue = "false") boolean sendingMessage
-    ){
+            @RequestParam (name = "sendingMessage", required = false, defaultValue = "false") boolean sendingMessage,
+            @RequestParam String token
+            ){
         // Pick a joke and send it to the client
         Collections.shuffle(listJokes);
         Joke joke = listJokes.get(0);
@@ -31,7 +36,19 @@ public class JokeRestController {
         if(sendingMessage)
             messageRestController.sendMessage(joke.toString());
 
-        return ResponseEntity.ok().body(joke);
+        // Check my token
+        boolean authorized = false;
+        for(Token t : listTokens){
+            if(token.equalsIgnoreCase(t.getToken())) {
+                authorized = true;
+            }
+        }
+
+        if(authorized){
+            return ResponseEntity.ok().body(joke);
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
     @GetMapping("/getJokeById")
