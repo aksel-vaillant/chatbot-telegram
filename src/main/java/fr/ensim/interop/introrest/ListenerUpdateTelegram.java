@@ -56,6 +56,7 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 
 					String[] cmds = lastMessageFromClient.split(" ");
 
+					// Joke function
 					if(cmds[0].equalsIgnoreCase("blague") || cmds[0].equalsIgnoreCase("joke")){
 						System.out.println(lastMessageFromClient);
 						System.out.println(cmds.length);
@@ -66,8 +67,10 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 							jokeRestController.getJokeLevel(true, cmds[1]);
 						}
 					}
+					// Weather function
 					else if(cmds[0].equalsIgnoreCase("meteo") || cmds[0].equalsIgnoreCase("weather")){
 						if(cmds.length == 1){
+							// By default - Le Mans
 							openWeatherRestController.meteo(true, "Le Mans");
 						}else{
 							// To get cities with more than a word
@@ -75,18 +78,11 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 							openWeatherRestController.meteo(true, cityName);
 						}
 					}
+					// Message function
 					else if(cmds[0].equalsIgnoreCase("boost")){
 						messageRestController.sendMessage("Allez bébou! Tu peux y arriver");
 					}
-					else if(cmds[0].equalsIgnoreCase("meteo")){
-						if(cmds.length == 1){
-							openWeatherRestController.meteo(true, "Le Mans");
-						}else{
-							// To get cities with more than a word
-							String cityName = lastMessageFromClient.replaceAll(cmds[0], "");
-							openWeatherRestController.meteo(true, cityName);
-						}
-					}
+					// Helping function - send a list of commands
 					else if(cmds[0].equalsIgnoreCase("aide") || cmds[0].equalsIgnoreCase("help")){
 						messageRestController.sendMessage("Voici la liste des commandes!\n" +
 								"blague\t avoir une blague\n" +
@@ -95,16 +91,15 @@ public class ListenerUpdateTelegram implements CommandLineRunner {
 								"meteo ville\t avoir la meteo d'une ville\n" +
 								"\t - par défaut : Le Mans");
 					}
+					// If none of those functions have been found
 					else{
 						messageRestController.sendMessage("Désolé, nous n'avons pas compris votre requête! " +
 								"Vous pouvez voir l'ensemble des commandes avec aide ou help ;)");
 					}
 
-
-
+					// Updated the last id
 					savedLastID = lastIDMessageFromClient;
 				}
-
 			}
 		};
 		Timer timer = new Timer("Timer");

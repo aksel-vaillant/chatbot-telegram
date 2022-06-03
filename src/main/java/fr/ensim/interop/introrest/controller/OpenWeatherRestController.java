@@ -1,5 +1,6 @@
 package fr.ensim.interop.introrest.controller;
 
+import fr.ensim.interop.introrest.model.telegram.MessageSend;
 import fr.ensim.interop.introrest.model.weather.City;
 import fr.ensim.interop.introrest.model.weather.OpenWeather;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +33,17 @@ public class OpenWeatherRestController {
             @RequestParam String ville
     ) throws UnsupportedEncodingException {
         String urlRequest = openWeatherCityUrl + "?q=" + URLEncoder.encode(ville, "UTF-8") + "&limit=3" + "&appid=" + openWeatherToken;
-        System.out.println(urlRequest);
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<City[]> getPosition = restTemplate.getForEntity(urlRequest,
                 City[].class, ville);
 
-        City city;
         if(getPosition.getBody().length > 0){
             // Take the first city from the answer
-            city = getPosition.getBody()[0];
+            City city = getPosition.getBody()[0];
             return ResponseEntity.ok().body(city);
         }else{
+            // However, block the request
             return ResponseEntity.badRequest().build();
         }
     }
@@ -54,9 +54,12 @@ public class OpenWeatherRestController {
             @RequestParam String ville
     ) throws UnsupportedEncodingException {
 
+        // Get position from a city name
         City city = getPosition(ville).getBody();
 
+        // Check if we have position of the city
         if(city == null){
+            // Send an error message
             messageRestController.sendMessage("Nous sommes désolés, nous n'avons pas réussi à trouver la météo correspondant à votre ville - " + ville);
             return ResponseEntity.badRequest().build();
         }else{

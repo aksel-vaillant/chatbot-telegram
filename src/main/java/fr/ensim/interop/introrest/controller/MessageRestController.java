@@ -46,7 +46,6 @@ public class MessageRestController {
 			@RequestParam String message) {
 
 		MessageSend messageToSend = new MessageSend(message);
-		messageToSend.setChat_id("935926668");
 
 		String urlRequest = telegramApiUrl + telegramBotToken + "/sendMessage";
 
