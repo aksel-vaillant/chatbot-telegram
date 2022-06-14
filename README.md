@@ -4,7 +4,7 @@ Realized by Aksel Vaillant and Clément Le Batard.
 CSE students at ENSIM - Le Mans Université [FRANCE]   
 Under the direction of Mr. Johan Girault   
 
-Made with Java and Telegram Api - https://core.telegram.org/bots/api
+Developped in Java with Telegram Api - https://core.telegram.org/bots/api
 
 ------------------
 
