@@ -15,9 +15,7 @@ Developped in Java with Telegram Api - https://core.telegram.org/bots/api
     joke                            Send a joke
     joke/:id                        Send a joke by id
     joke/:title                     Send a joke by title
-    joke "nulle"                    Send a bad joke
-    joke "bonne"                    Send a good joke
-    weather/:cityName               Send the weater
+    weather/:cityName               Send the weather
         - by default, it will send the meteo of Le Mans
    
  Also...
